@@ -4,7 +4,7 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 
 # Tap into API (API Key Saved in Computer Memory As Environment Variable)
-os.environ['OPENAI_API_KEY'] = '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'
+os.environ['OPENAI_API_KEY'] = 'YOUR API KEY'
 openai.api_key = (os.getenv('OPENAI_API_KEY'))
 
 # read csv data
