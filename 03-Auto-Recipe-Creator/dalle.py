@@ -1,8 +1,8 @@
 import re
 import requests
 import shutil
-
 import openai
+
 
 class Dish2Image:
 
@@ -18,7 +18,6 @@ class Dish2Image:
             return Dish2Image.save_image(image_url, f"{self.title}.jpg")
         raise ValueError("Prompt not accepted.")
 
-
     def dalle2_prompt(self):
         prompt = f"'{self.title}', professional food photography, 15mm, studio lighting"
         return prompt
@@ -32,29 +31,30 @@ class Dish2Image:
             return True
         return False
 
-
     @staticmethod
     def _extract_title(recipe):
         return re.findall("^.*Recipe Title: .*$", recipe, re.MULTILINE)[0].strip().split("Recipe Title: ")[1]
 
     @staticmethod
     def generate(image_prompt):
-        response = openai.Image.create(prompt=image_prompt,
-                                        n=1,
-                                        size="1024x1024"
-                                        )
+        response = openai.Image.create(
+            prompt=image_prompt,
+            n=1,
+            size="1024x1024"
+        )
         return response
 
     @staticmethod
     def save_image(image_url, file_name):
-        image_res = requests.get(image_url, stream = True)
-        
+        image_res = requests.get(image_url, stream=True)
+
         if image_res.status_code == 200:
-            with open(file_name,'wb') as f:
+            with open(file_name, 'wb') as f:
                 shutil.copyfileobj(image_res.raw, f)
         else:
             print("Error downloading image!")
         return image_res.status_code
+
 
 if __name__ == "__main__":
     """
