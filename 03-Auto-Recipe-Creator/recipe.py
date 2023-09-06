@@ -3,11 +3,9 @@ import openai
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+
 class RecipeGenerator:
-    
     def __init__(self):
-            
-        
         self.list_of_ingredients = self.ask_for_ingredients()
 
     @staticmethod
@@ -18,9 +16,9 @@ class RecipeGenerator:
             if ingredient.lower() == "done":
                 break
             list_of_ingredients.append(ingredient)
-        
+
         print(f"Your ingredients are: {', '.join(list_of_ingredients)}")
-        
+
         return list_of_ingredients
 
     def generate_recipe(self):
@@ -33,7 +31,7 @@ class RecipeGenerator:
     @staticmethod
     def create_recipe_prompt(list_of_ingredients):
         prompt = f"Create a detailed recipe based on only the following ingredients: {', '.join(list_of_ingredients)}.\n" \
-                + f"Additionally, assign a title starting with 'Recipe Title: ' to this dish, which can be used to create a photorealistic image of it."
+                 + f"Additionally, assign a title starting with 'Recipe Title: ' to this dish, which can be used to create a photorealistic image of it."
         return prompt
 
     @staticmethod
@@ -47,10 +45,12 @@ class RecipeGenerator:
 
     @staticmethod
     def generate(prompt):
-        response = openai.Completion.create(engine="text-davinci-003",
-                                                    prompt=prompt,
-                                                    max_tokens=256,
-                                                    temperature=0.7)
+        response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=prompt,
+            max_tokens=256,
+            temperature=0.7
+        )
         return response
 
     def store_recipe(self, recipe, filename):
