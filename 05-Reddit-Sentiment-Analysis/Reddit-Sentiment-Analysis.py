@@ -4,6 +4,8 @@ import openai
 
 client_id = os.getenv('CLIENT_ID')
 reddit_secret = os.getenv('REDDIT_SECRET')
+openai.api_key = os.getenv('OPENAI_API_KEY')
+
 
 reddit = praw.Reddit(
     client_id=client_id,
@@ -66,3 +68,23 @@ def create_prompt(title_and_comments):
     task = "Return the stock ticker or company name mentioned in the following comments and classify the sentiment " \
            "around the company as positive, negative, or neutral. If no ticker or company is mentioned write 'No company" \
            "mentioned' \n\n "
+    return task + title_and_comments
+
+
+print(create_prompt(titles_and_comments[1]))
+
+for key, title_and_comments in titles_and_comments.items():
+    prompt = create_prompt(title_and_comments)
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=256,
+        temperature=0,
+        top_p=1.0,
+        frequency_penalty=0.0,
+        presence_penalty=0.0
+    )
+
+    print(title_and_comments)
+    print("Sentiment: " + response["choices"][0]["text"])
+    print("-"*30)
